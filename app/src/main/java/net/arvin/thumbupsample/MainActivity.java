@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     public void setNum(View v) {
         try {
             int num = Integer.valueOf(edNum.getText().toString().trim());
-            thumbUpView.setCount(num).setThumbUp(false);
+            thumbUpView.setCount(num).setThumbUp(true);
         } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(this, "只能输入整数", Toast.LENGTH_LONG).show();

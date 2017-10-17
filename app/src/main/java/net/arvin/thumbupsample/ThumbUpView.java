@@ -38,8 +38,10 @@ public class ThumbUpView extends View implements View.OnClickListener {
 
     private static final float TEXT_DEFAULT_SIZE = 15;
 
+    //缩放动画的时间
     private static final int SCALE_DURING = 150;
-    private static final int RADIUS_DURING = 150;
+    //圆圈扩散动画的时间
+    private static final int RADIUS_DURING = 100;
     //圆圈颜色
     private static final int START_COLOR = Color.parseColor("#00e24d3d");
     private static final int END_COLOR = Color.parseColor("#88e24d3d");
@@ -50,31 +52,30 @@ public class ThumbUpView extends View implements View.OnClickListener {
     private int dp_2;
     private int dp_8;
 
+    //圆圈扩散的最小最大值，根据图标大小计算得出
     private float RADIUS_MIN;
     private float RADIUS_MAX;
 
+    //文本的上下移动变化值
     private float OFFSET_MIN;
     private float OFFSET_MAX;
 
     //是否点赞
     private boolean isThumbUp;
-    private boolean isCanceled;
 
     private Bitmap thumbUp;
     private Bitmap notThumbUp;
     private Bitmap shining;
-
     private float mScale;
     private float mRadius;
     private float mCircleX;
     private float mCircleY;
-
     private Path mClipPath;
-
-    private Animator currentAnim;
-
     private Paint mBitmapPaint;
     private Paint mCirclePaint;
+
+    private boolean isCanceled;
+    private Animator currentAnim;
 
     private int count;
     private Paint mTextPaint;
@@ -82,14 +83,18 @@ public class ThumbUpView extends View implements View.OnClickListener {
     private float textSize;
     private float drawablePadding;
 
-    private ThumbUpClickListener thumbUpClickListener;
     private String[] nums;//num[0]是不变的部分，nums[1]原来的部分，nums[2]变化后的部分
     private boolean toBigger;
     private float mOldOffsetY;
     private float mNewOffsetY;
+
+    //为了保证居中绘制，这是绘制的起点坐标，减去这个值则为以原点为坐标开始绘制的
     private int startX;
     private int startY;
+
     private long lastClickTime;
+    //点击的回调
+    private ThumbUpClickListener thumbUpClickListener;
 
     public ThumbUpView(Context context) {
         this(context, null);
@@ -163,6 +168,7 @@ public class ThumbUpView extends View implements View.OnClickListener {
         return (int) (spValue * fontScale + 0.5f);
     }
 
+    //======自定义属性动画部分======
     public void setNotThumbUpScale(float scale) {
         mScale = scale;
         Matrix matrix = new Matrix();
@@ -223,6 +229,7 @@ public class ThumbUpView extends View implements View.OnClickListener {
     public float getTextOffsetY() {
         return OFFSET_MIN;
     }
+    //======自定义属性动画部分======
 
     public ThumbUpView setCount(int count) {
         this.count = count;
@@ -338,6 +345,8 @@ public class ThumbUpView extends View implements View.OnClickListener {
                 canvas.restore();
 
                 canvas.drawCircle(startX + mCircleX, startY + mCircleY, mRadius, mCirclePaint);
+            } else {//为了保险，虽然正常情况mClipPath都不会为null
+                canvas.drawBitmap(shining, startX + dp_2, startY, mBitmapPaint);
             }
 
             canvas.drawBitmap(thumbUp, startX, startY + dp_8, mBitmapPaint);
@@ -418,7 +427,7 @@ public class ThumbUpView extends View implements View.OnClickListener {
         } else {
             calculateChangeNum(1);
             count++;
-            mClipPath = null;
+//            mClipPath = null;
             showThumbUpAnim();
         }
     }
@@ -503,8 +512,10 @@ public class ThumbUpView extends View implements View.OnClickListener {
     }
 
     public interface ThumbUpClickListener {
+        //点赞回调
         void thumbUpFinish();
 
+        //取消回调
         void thumbDownFinish();
     }
 
