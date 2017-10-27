@@ -427,7 +427,6 @@ public class ThumbUpView extends View implements View.OnClickListener {
         } else {
             calculateChangeNum(1);
             count++;
-//            mClipPath = null;
             showThumbUpAnim();
         }
     }
@@ -458,7 +457,7 @@ public class ThumbUpView extends View implements View.OnClickListener {
         thumbUpScale.setInterpolator(new OvershootInterpolator());
 
         ObjectAnimator circleScale = ObjectAnimator.ofFloat(this, "circleScale", RADIUS_MIN, RADIUS_MAX);
-        thumbUpScale.setDuration(RADIUS_DURING);
+        circleScale.setDuration(RADIUS_DURING);
 
         AnimatorSet set = new AnimatorSet();
         set.play(thumbUpScale).with(circleScale);
@@ -479,7 +478,7 @@ public class ThumbUpView extends View implements View.OnClickListener {
     }
 
     private void showThumbDownAnim() {
-        ObjectAnimator thumbUpScale = ObjectAnimator.ofFloat(this, "thumbUpScale", SCALE_MIN, SCALE_MAX);
+        ObjectAnimator thumbUpScale = ObjectAnimator.ofFloat(this, "thumbUpScale", SCALE_MAX, SCALE_MIN);
         thumbUpScale.setDuration(SCALE_DURING);
         thumbUpScale.addListener(new ClickAnimatorListener() {
             @Override
@@ -491,7 +490,7 @@ public class ThumbUpView extends View implements View.OnClickListener {
         ObjectAnimator textOffsetY = ObjectAnimator.ofFloat(this, "textOffsetY", OFFSET_MIN, OFFSET_MAX);
         textOffsetY.setDuration(SCALE_DURING + RADIUS_DURING);
 
-        ObjectAnimator notThumbUpScale = ObjectAnimator.ofFloat(this, "notThumbUpScale", SCALE_MAX, SCALE_MAX);
+        ObjectAnimator notThumbUpScale = ObjectAnimator.ofFloat(this, "notThumbUpScale", SCALE_MIN, SCALE_MAX);
         notThumbUpScale.setDuration(SCALE_DURING);
 
         AnimatorSet set = new AnimatorSet();
