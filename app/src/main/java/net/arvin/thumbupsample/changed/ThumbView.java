@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,11 +16,9 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
 
-import net.arvin.thumbupsample.OldThumbUpView;
 import net.arvin.thumbupsample.R;
 
 /**
@@ -63,13 +60,13 @@ public class ThumbView extends View {
 
     private boolean mIsThumbUp;
     private long mLastStartTime;
-    private boolean isFastAnim;
     //点击的回调
-    private ThumbUpClickListener thumbUpClickListener;
+    private ThumbUpClickListener mThumbUpClickListener;
 
     //被点击的次数，未点击时，未点赞是0，点赞是1，所以点完之后的次数是偶数则就是未点赞，奇数就是点赞
     private int mClickCount;
     private int mEndCount;
+    private AnimatorSet mThumbUpAnim;
 
     public ThumbView(Context context) {
         this(context, null);
@@ -142,7 +139,7 @@ public class ThumbView extends View {
     }
 
     public void setThumbUpClickListener(ThumbUpClickListener thumbUpClickListener) {
-        this.thumbUpClickListener = thumbUpClickListener;
+        this.mThumbUpClickListener = thumbUpClickListener;
     }
 
     public TuvPoint getCirclePoint() {
@@ -205,7 +202,7 @@ public class ThumbView extends View {
 
     public void startAnim() {
         mClickCount++;
-        isFastAnim = false;
+        boolean isFastAnim = false;
         long currentTimeMillis = System.currentTimeMillis();
         if (currentTimeMillis - mLastStartTime < 300) {
             isFastAnim = true;
@@ -220,8 +217,12 @@ public class ThumbView extends View {
             startThumbDownAnim();
             mClickCount = 0;
         } else {
-            startThumbUpAnim();
-            mClickCount = 1;
+            if (mThumbUpAnim != null) {
+                mClickCount = 0;
+            } else {
+                startThumbUpAnim();
+                mClickCount = 1;
+            }
         }
         mEndCount = mClickCount;
     }
@@ -247,8 +248,8 @@ public class ThumbView extends View {
                 if (mClickCount % 2 == 0) {
                     startThumbDownAnim();
                 } else {
-                    if (thumbUpClickListener != null) {
-                        thumbUpClickListener.thumbUpFinish();
+                    if (mThumbUpClickListener != null) {
+                        mThumbUpClickListener.thumbUpFinish();
                     }
                 }
             }
@@ -265,8 +266,8 @@ public class ThumbView extends View {
                 super.onAnimationEnd(animation);
                 mIsThumbUp = false;
                 setNotThumbUpScale(SCALE_MAX);
-                if (thumbUpClickListener != null) {
-                    thumbUpClickListener.thumbDownFinish();
+                if (mThumbUpClickListener != null) {
+                    mThumbUpClickListener.thumbDownFinish();
                 }
             }
         });
@@ -291,19 +292,20 @@ public class ThumbView extends View {
         ObjectAnimator circleScale = ObjectAnimator.ofFloat(this, "circleScale", mRadiusMin, mRadiusMax);
         thumbUpScale.setDuration(RADIUS_DURING);
 
-        AnimatorSet set = new AnimatorSet();
-        set.play(thumbUpScale).with(circleScale);
-        set.play(thumbUpScale).after(notThumbUpScale);
-        set.addListener(new AnimatorListenerAdapter() {
+        mThumbUpAnim = new AnimatorSet();
+        mThumbUpAnim.play(thumbUpScale).with(circleScale);
+        mThumbUpAnim.play(thumbUpScale).after(notThumbUpScale);
+        mThumbUpAnim.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                if (thumbUpClickListener != null) {
-                    thumbUpClickListener.thumbUpFinish();
+                mThumbUpAnim = null;
+                if (mThumbUpClickListener != null) {
+                    mThumbUpClickListener.thumbUpFinish();
                 }
             }
         });
-        set.start();
+        mThumbUpAnim.start();
     }
 
     private void setNotThumbUpScale(float scale) {

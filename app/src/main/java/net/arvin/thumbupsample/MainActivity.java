@@ -2,6 +2,7 @@ package net.arvin.thumbupsample;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -26,24 +27,24 @@ public class MainActivity extends AppCompatActivity {
         oldThumbUpView.setThumbUpClickListener(new OldThumbUpView.ThumbUpClickListener() {
             @Override
             public void thumbUpFinish() {
-                showToast("Old点赞成功");
+                Log.d("MainActivity","Old点赞成功");
             }
 
             @Override
             public void thumbDownFinish() {
-                showToast("Old取消点赞成功");
+                Log.d("MainActivity","Old取消点赞成功");
             }
         });
 
         newThumbUpView.setThumbUpClickListener(new ThumbView.ThumbUpClickListener() {
             @Override
             public void thumbUpFinish() {
-                showToast("New点赞成功");
+                Log.d("MainActivity","New点赞成功");
             }
 
             @Override
             public void thumbDownFinish() {
-                showToast("New取消点赞成功");
+                Log.d("MainActivity","New取消点赞成功");
             }
         });
         //根据回调Toast的显示可以看出，之前的版本虽然结果正确但是会对回调有可能重复调用多次。
