@@ -2,7 +2,7 @@
 
 这是放即刻app点赞效果的Demo，效果如下：
 
-![效果图](gif/thumbUp.gif)
+![效果图](http://upload-images.jianshu.io/upload_images/3157525-2dce61d2beffd40e.gif?imageMogr2/auto-orient/strip)
 
 [例子.apk](https://github.com/arvinljw/ThumbUpSample/tree/master/app/app-release.apk)
 
