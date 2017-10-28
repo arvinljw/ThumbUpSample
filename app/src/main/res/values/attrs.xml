@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="ThumbUpView">
-        <attr name="count" format="integer"/>
+    <declare-styleable name="OldThumbUpView">
+        <attr name="o_tuv_count" format="integer"/>
     </declare-styleable>
+
+    <declare-styleable name="CountView">
+        <attr name="cv_count" format="integer"/>
+        <attr name="cv_text_color" format="color"/>
+        <attr name="cv_text_size" format="dimension"/>
+    </declare-styleable>
+
+    <declare-styleable name="ThumbView">
+        <attr name="tv_isThumbUp" format="boolean"/>
+    </declare-styleable>
+
+
+    <declare-styleable name="ThumbUpView">
+        <attr name="tuv_count" format="integer"/>
+        <attr name="tuv_text_color" format="color"/>
+        <attr name="tuv_text_size" format="dimension"/>
+        <attr name="tuv_drawable_padding" format="dimension"/>
+        <attr name="tuv_isThumbUp" format="boolean"/>
+    </declare-styleable>
+
 </resources>

@@ -9,12 +9,22 @@
     android:orientation="vertical"
     tools:context="net.arvin.thumbupsample.MainActivity">
 
-    <net.arvin.thumbupsample.ThumbUpView
-        android:id="@+id/thumbUpView"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        app:count="109"/>
+    <net.arvin.thumbupsample.OldThumbUpView
+        android:id="@+id/oldThumbUpView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="10dp"
+        app:o_tuv_count="109"/>
 
+
+    <net.arvin.thumbupsample.changed.ThumbUpView
+        android:id="@+id/newThumbUpView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="10dp"
+        app:tuv_count="109"/>
 
     <EditText
         android:id="@+id/ed_num"
@@ -26,11 +36,8 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="设置"
         android:onClick="setNum"
+        android:text="设置"
         />
-
-
-
 
 </LinearLayout>

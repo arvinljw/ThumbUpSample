@@ -26,7 +26,7 @@ import android.view.animation.OvershootInterpolator;
  * Function：
  * Desc：仿即刻App点赞效果
  */
-public class ThumbUpView extends View implements View.OnClickListener {
+public class OldThumbUpView extends View implements View.OnClickListener {
     private static final float SCALE_MIN = 0.9f;
     private static final float SCALE_MAX = 1f;
 
@@ -96,18 +96,18 @@ public class ThumbUpView extends View implements View.OnClickListener {
     //点击的回调
     private ThumbUpClickListener thumbUpClickListener;
 
-    public ThumbUpView(Context context) {
+    public OldThumbUpView(Context context) {
         this(context, null);
     }
 
-    public ThumbUpView(Context context, @Nullable AttributeSet attrs) {
+    public OldThumbUpView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public ThumbUpView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public OldThumbUpView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ThumbUpView);
-        count = typedArray.getInt(R.styleable.ThumbUpView_count, 0);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.OldThumbUpView);
+        count = typedArray.getInt(R.styleable.OldThumbUpView_o_tuv_count, 0);
         typedArray.recycle();
         init();
     }
@@ -219,9 +219,9 @@ public class ThumbUpView extends View implements View.OnClickListener {
     public void setTextOffsetY(float offsetY) {
         this.mOldOffsetY = offsetY;//变大是从[0,1]，变小是[0,-1]
         if (toBigger) {//从下到上[-1,0]
-            this.mNewOffsetY = OFFSET_MAX + offsetY;
-        } else {//从上到下[1,0]
             this.mNewOffsetY = offsetY - OFFSET_MAX;
+        } else {//从上到下[1,0]
+            this.mNewOffsetY = OFFSET_MAX + offsetY;
         }
         postInvalidate();
     }
@@ -231,14 +231,14 @@ public class ThumbUpView extends View implements View.OnClickListener {
     }
     //======自定义属性动画部分======
 
-    public ThumbUpView setCount(int count) {
+    public OldThumbUpView setCount(int count) {
         this.count = count;
         calculateChangeNum(0);
-        postInvalidate();
+        requestLayout();
         return this;
     }
 
-    public ThumbUpView setThumbUp(boolean isThumbUp) {
+    public OldThumbUpView setThumbUp(boolean isThumbUp) {
         this.isThumbUp = isThumbUp;
         postInvalidate();
         return this;
@@ -255,6 +255,9 @@ public class ThumbUpView extends View implements View.OnClickListener {
         int specSize = MeasureSpec.getSize(measureSpec);
 
         switch (specMode) {
+            case MeasureSpec.UNSPECIFIED:
+                result = specSize;
+                break;
             case MeasureSpec.AT_MOST:
                 result = getContentWidth();
                 break;
@@ -272,6 +275,9 @@ public class ThumbUpView extends View implements View.OnClickListener {
         int specSize = MeasureSpec.getSize(measureSpec);
 
         switch (specMode) {
+            case MeasureSpec.UNSPECIFIED:
+                result = specSize;
+                break;
             case MeasureSpec.AT_MOST:
                 result = getContentHeight();
                 break;
@@ -314,7 +320,6 @@ public class ThumbUpView extends View implements View.OnClickListener {
         data.putInt("count", count);
         data.putBoolean("isThumbUp", isThumbUp);
         return data;
-
     }
 
     @Override
@@ -367,10 +372,10 @@ public class ThumbUpView extends View implements View.OnClickListener {
         float fraction = (OFFSET_MAX - Math.abs(mOldOffsetY)) / (OFFSET_MAX - OFFSET_MIN);
 
         mTextPaint.setColor((Integer) evaluate(fraction, TEXT_DEFAULT_END_COLOR, TEXT_DEFAULT_COLOR));
-        canvas.drawText(String.valueOf(nums[1]), startX + textStartX + textWidth * nums[0].length(), startY + y + mOldOffsetY, mTextPaint);
+        canvas.drawText(String.valueOf(nums[1]), startX + textStartX + textWidth * nums[0].length(), startY + y - mOldOffsetY, mTextPaint);
 
         mTextPaint.setColor((Integer) evaluate(fraction, TEXT_DEFAULT_COLOR, TEXT_DEFAULT_END_COLOR));
-        canvas.drawText(String.valueOf(nums[2]), startX + textStartX + textWidth * nums[0].length(), startY + y + mNewOffsetY, mTextPaint);
+        canvas.drawText(String.valueOf(nums[2]), startX + textStartX + textWidth * nums[0].length(), startY + y - mNewOffsetY, mTextPaint);
     }
 
     /**
@@ -450,7 +455,7 @@ public class ThumbUpView extends View implements View.OnClickListener {
             }
         });
 
-        ObjectAnimator textOffsetY = ObjectAnimator.ofFloat(this, "textOffsetY", OFFSET_MIN, -OFFSET_MAX);
+        ObjectAnimator textOffsetY = ObjectAnimator.ofFloat(this, "textOffsetY", OFFSET_MIN, OFFSET_MAX);
         textOffsetY.setDuration(SCALE_DURING + RADIUS_DURING);
 
         ObjectAnimator thumbUpScale = ObjectAnimator.ofFloat(this, "thumbUpScale", SCALE_MIN, SCALE_MAX);
@@ -488,7 +493,7 @@ public class ThumbUpView extends View implements View.OnClickListener {
             }
         });
 
-        ObjectAnimator textOffsetY = ObjectAnimator.ofFloat(this, "textOffsetY", OFFSET_MIN, OFFSET_MAX);
+        ObjectAnimator textOffsetY = ObjectAnimator.ofFloat(this, "textOffsetY", OFFSET_MIN, -OFFSET_MAX);
         textOffsetY.setDuration(SCALE_DURING + RADIUS_DURING);
 
         ObjectAnimator notThumbUpScale = ObjectAnimator.ofFloat(this, "notThumbUpScale", SCALE_MAX, SCALE_MAX);
