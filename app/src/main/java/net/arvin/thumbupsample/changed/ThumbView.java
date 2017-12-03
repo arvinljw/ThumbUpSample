@@ -233,7 +233,7 @@ public class ThumbView extends View {
         thumbUpScale.setInterpolator(new OvershootInterpolator());
 
         ObjectAnimator circleScale = ObjectAnimator.ofFloat(this, "circleScale", mRadiusMin, mRadiusMax);
-        thumbUpScale.setDuration(RADIUS_DURING);
+        circleScale.setDuration(RADIUS_DURING);
 
         AnimatorSet set = new AnimatorSet();
         set.play(thumbUpScale).with(circleScale);
@@ -290,7 +290,7 @@ public class ThumbView extends View {
         thumbUpScale.setInterpolator(new OvershootInterpolator());
 
         ObjectAnimator circleScale = ObjectAnimator.ofFloat(this, "circleScale", mRadiusMin, mRadiusMax);
-        thumbUpScale.setDuration(RADIUS_DURING);
+        circleScale.setDuration(RADIUS_DURING);
 
         mThumbUpAnim = new AnimatorSet();
         mThumbUpAnim.play(thumbUpScale).with(circleScale);
