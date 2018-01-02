@@ -27,6 +27,7 @@ public class ThumbUpView extends LinearLayout implements View.OnClickListener {
     private int mTextColor;
     private int mCount;
     private float mTextSize;
+    // 是否是 点赞状态
     private boolean mIsThumbUp;
     private int mTopMargin;
     private boolean mNeedChangeChildView;
@@ -175,13 +176,20 @@ public class ThumbUpView extends LinearLayout implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        mIsThumbUp = !mIsThumbUp;
+         long currentTimeMillis = System.currentTimeMillis();
+
+        if (currentTimeMillis - mLastStartTime < 300) {
+            return;
+        }
+        mLastStartTime = currentTimeMillis;
+
         if (mIsThumbUp) {
-            mCountView.calculateChangeNum(1);
-        } else {
             mCountView.calculateChangeNum(-1);
+        } else {
+            mCountView.calculateChangeNum(1);
         }
         mThumbView.startAnim();
+        mIsThumbUp = !mIsThumbUp;
     }
 
     @Override
