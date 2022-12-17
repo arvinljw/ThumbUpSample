@@ -6,6 +6,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PointF;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -32,7 +33,7 @@ public class CountView extends View {
 
     private int mCount;
     private String[] mTexts;//mTexts[0]是不变的部分，mTexts[1]原来的部分，mTexts[2]变化后的部分
-    private TuvPoint[] mTextPoints;//表示各部分的坐标
+    private PointF[] mTextPoints;//表示各部分的坐标
 
     private float mMaxOffsetY;
     private float mMinOffsetY;
@@ -63,10 +64,10 @@ public class CountView extends View {
 
     private void init() {
         mTexts = new String[3];
-        mTextPoints = new TuvPoint[3];
-        mTextPoints[0] = new TuvPoint();
-        mTextPoints[1] = new TuvPoint();
-        mTextPoints[2] = new TuvPoint();
+        mTextPoints = new PointF[3];
+        mTextPoints[0] = new PointF();
+        mTextPoints[1] = new PointF();
+        mTextPoints[2] = new PointF();
         calculateChangeNum(0);
 
         mMinOffsetY = 0;
@@ -144,7 +145,7 @@ public class CountView extends View {
         float unChangeWidth = textWidth * mTexts[0].length();
 
         Paint.FontMetricsInt fontMetrics = mTextPaint.getFontMetricsInt();
-        float y = getPaddingTop() + (getContentHeight() - fontMetrics.bottom - fontMetrics.top) / 2;
+        float y = getPaddingTop() + (getContentHeight() - fontMetrics.bottom - fontMetrics.top) / 2f;
 
         mTextPoints[0].x = getPaddingLeft();
         mTextPoints[1].x = getPaddingLeft() + unChangeWidth;

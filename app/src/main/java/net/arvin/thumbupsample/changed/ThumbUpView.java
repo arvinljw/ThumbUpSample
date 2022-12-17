@@ -3,6 +3,7 @@ package net.arvin.thumbupsample.changed;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.PointF;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
@@ -89,7 +90,7 @@ public class ThumbUpView extends LinearLayout implements View.OnClickListener {
         return this;
     }
 
-    public void setThumbUpClickListener(ThumbView.ThumbUpClickListener listener){
+    public void setThumbUpClickListener(ThumbView.ThumbUpClickListener listener) {
         mThumbView.setThumbUpClickListener(listener);
     }
 
@@ -136,7 +137,7 @@ public class ThumbUpView extends LinearLayout implements View.OnClickListener {
     private void addThumbView() {
         mThumbView = new ThumbView(getContext());
         mThumbView.setIsThumbUp(mIsThumbUp);
-        TuvPoint circlePoint = mThumbView.getCirclePoint();
+        PointF circlePoint = mThumbView.getCirclePoint();
         mTopMargin = (int) (circlePoint.y - mTextSize / 2);
         addView(mThumbView, getThumbParams());
     }
